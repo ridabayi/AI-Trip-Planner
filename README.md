@@ -1,6 +1,6 @@
 # ✈️ AI Trip Planner
 
-> **Your personal AI-powered travel companion** – plan smarter itineraries with LLMs, visualize them in an elegant UI, and deploy at scale using Docker, Kubernetes, and the ELK stack.  
+> **AI Trip Planner** is a next-generation LLM-powered travel assistant that transforms how users design and experience trips. By combining Large Language Models with a sleek Streamlit UI, it generates personalized, day-by-day itineraries enriched with images, maps, and activity details.
 
 ![GitHub repo size](https://img.shields.io/github/repo-size/ridabayi/AI-Trip-Planner?color=blue)  
 ![GitHub stars](https://img.shields.io/github/stars/ridabayi/AI-Trip-Planner?style=social)  
