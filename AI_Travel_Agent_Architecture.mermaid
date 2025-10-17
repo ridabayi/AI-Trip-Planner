@@ -1,0 +1,190 @@
+flowchart TD
+    %% ========== USER INTERFACE LAYER ==========
+    subgraph UI[🌐 User Interface Layer]
+        U[👤 User]
+        ST[📱 Streamlit Frontend]
+        
+        subgraph ST_Tabs[Streamlit Tabs]
+            TAB1[🗒️ Overview Tab]
+            TAB2[📊 Table View Tab]
+            TAB3[🗺️ Map View Tab]
+            TAB4[📆 Day-by-Day Tab]
+            TAB5[📤 Export Tab]
+        end
+    end
+
+    U -->|City + Preferences| ST
+    ST --> ST_Tabs
+
+    %% ========== APPLICATION LAYER ==========
+    subgraph APP[🧠 Application Layer]
+        TP[🚀 TravelPlanner Core]
+        IC[🔗 Itinerary Chain]
+        CFG[⚙️ Configuration]
+        
+        subgraph UTILS[🛠️ Utilities]
+            LOG[📝 Logger]
+            EX[🚨 Exception Handler]
+        end
+    end
+
+    ST -->|API Calls| TP
+    TP -->|Orchestrates| IC
+    TP -->|Uses| CFG
+    TP -->|Logs to| LOG
+    TP -->|Handles errors with| EX
+
+    %% ========== EXTERNAL SERVICES ==========
+    subgraph EXT[🌍 External Services]
+        LLM[🤖 Groq LLM API]
+        GM[🗺️ Google Maps API]
+        WIKI[📚 Wikipedia/Wikidata API]
+        
+        subgraph DEPLOY[🚀 Deployment & Monitoring]
+            DK[🐳 Docker Container]
+            K8S[☸️ Kubernetes Cluster]
+            ELK[📊 ELK Stack]
+        end
+    end
+
+    IC -->|LLM Requests| LLM
+    IC -->|Map Links| GM
+    IC -->|Image Search| WIKI
+    APP -->|Deployed on| DEPLOY
+    DEPLOY -->|Monitored by| ELK
+
+    %% ========== DATA FLOW ==========
+    subgraph DATA[💾 Data Processing Flow]
+        INPUT[📥 User Input<br/>City, Interests, Preferences]
+        PROCESS[⚡ LLM Processing<br/>Structured JSON Generation]
+        ENRICH[✨ Data Enrichment<br/>Maps, Images, Localization]
+        OUTPUT[📤 Multi-format Output<br/>Markdown, JSON, ICS]
+    end
+
+    INPUT --> PROCESS
+    PROCESS --> ENRICH
+    ENRICH --> OUTPUT
+
+    %% ========== DETAILED CONNECTIONS ==========
+    %% User input flow
+    U --> INPUT
+    INPUT --> TP
+    
+    %% LLM processing flow
+    TP -->|City + Interests| IC
+    IC -->|Prompt Engineering| LLM
+    LLM -->|Structured JSON| IC
+    
+    %% Data enrichment flow
+    IC -->|POI Data| GM
+    IC -->|Image Requests| WIKI
+    GM -->|Map Links| IC
+    WIKI -->|Image URLs| IC
+    
+    %% Output generation flow
+    IC -->|Enriched Data| TP
+    TP -->|Formatted Itinerary| ST
+    ST --> OUTPUT
+    
+    %% Deployment flow
+    APP -->|Containerized| DK
+    DK -->|Orchestrated| K8S
+    K8S -->|Logs to| ELK
+    
+    %% ========== COMPONENT DETAILS ==========
+    %% TravelPlanner details
+    subgraph TP_Details[TravelPlanner Details]
+        TP1[set_city()]
+        TP2[set_interests()]
+        TP3[set_days()]
+        TP4[set_preferences()]
+        TP5[create_itinerary()]
+    end
+    
+    TP --> TP_Details
+    
+    %% Itinerary Chain details
+    subgraph IC_Details[Itinerary Chain Details]
+        IC1[generate_itinerary_payload()]
+        IC2[Multi-language Support]
+        IC3[JSON Parsing & Validation]
+        IC4[Google Maps Integration]
+        IC5[Wikipedia Image Fetching]
+    end
+    
+    IC --> IC_Details
+    
+    %% Streamlit details
+    subgraph ST_Details[Streamlit Features]
+        ST1[Real-time UI Updates]
+        ST2[Interactive Controls]
+        ST3[Multiple View Tabs]
+        ST4[Export Functionality]
+        ST5[Responsive Design]
+    end
+    
+    ST --> ST_Details
+
+    %% ========== STYLING AND FORMATTING ==========
+    classDef user fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef frontend fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef backend fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px
+    classDef external fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    classDef data fill:#fce4ec,stroke:#880e4f,stroke-width:2px
+    classDef deployment fill:#e0f2f1,stroke:#004d40,stroke-width:2px
+    classDef detail fill:#f5f5f5,stroke:#616161,stroke-width:1px
+
+    class U user
+    class ST,ST_Tabs,TAB1,TAB2,TAB3,TAB4,TAB5 frontend
+    class TP,IC,CFG,UTILS,LOG,EX backend
+    class LLM,GM,WIKI external
+    class INPUT,PROCESS,ENRICH,OUTPUT data
+    class DEPLOY,DK,K8S,ELK deployment
+    class TP_Details,IC_Details,ST_Details detail
+
+    %% ========== LEGEND ==========
+    subgraph LEGEND[📋 Legend]
+        L1[👤 User Interaction]
+        L2[🌐 Frontend Components]
+        L3[🧠 Backend Logic]
+        L4[🌍 External Services]
+        L5[💾 Data Processing]
+        L6[🚀 Deployment]
+    end
+
+    %% ========== KEY FEATURES HIGHLIGHT ==========
+    subgraph FEATURES[⭐ Key Features]
+        F1[🤖 AI-Powered Itinerary Generation]
+        F2[🗺️ Interactive Maps & Directions]
+        F3[🌐 Multi-language Support]
+        F4[📸 Automatic Image Fetching]
+        F5[📊 Multiple Export Formats]
+        F6[☸️ Kubernetes Deployment]
+        F7[📈 ELK Monitoring]
+        F8[🐳 Docker Containerization]
+    end
+
+    %% ========== WORKFLOW SEQUENCE ==========
+    Note over U,ST: 1. User provides input
+    Note over ST,TP: 2. Streamlit sends to backend
+    Note over TP,IC: 3. TravelPlanner orchestrates
+    Note over IC,LLM: 4. LLM generates itinerary
+    Note over IC,GM: 5. Maps integration
+    Note over IC,WIKI: 6. Image enrichment
+    Note over IC,TP: 7. Data processing
+    Note over TP,ST: 8. Response to frontend
+    Note over ST,U: 9. Display to user
+
+    %% ========== ERROR HANDLING ==========
+    TP -.->|Error| EX
+    IC -.->|Error| EX
+    LLM -.->|Error| EX
+    GM -.->|Error| EX
+    WIKI -.->|Error| EX
+    EX -.->|Logs| LOG
+    LOG -.->|Stores| ELK
+
+    %% ========== CONFIGURATION FLOW ==========
+    CFG -->|API Keys| IC
+    CFG -->|Environment Vars| TP
+    CFG -->|Settings| ST
