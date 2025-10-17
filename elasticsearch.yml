@@ -28,15 +28,12 @@ spec:
     spec:
       containers:
         - name: elasticsearch
-          # ✅ Option 1: garde 7.17.0 + correctif JVM
-          # (ou remplace par 7.16.3 si tu veux éviter le bug complètement)
           image: docker.elastic.co/elasticsearch/elasticsearch:7.17.0
           env:
             - name: discovery.type
               value: single-node
-            # ✅ Correctif clé pour CGroup v2 bug
             - name: ES_JAVA_OPTS
-              value: "-Xms512m -Xmx512m -Djdk.disableLastCgroup=true"
+              value: "-Xms512m -Xmx512m"
             - name: xpack.security.enabled
               value: "false"
           ports:
@@ -49,8 +46,8 @@ spec:
               memory: "1Gi"
               cpu: "500m"
           volumeMounts:
-            - name: elasticsearch-storage
-              mountPath: /usr/share/elasticsearch/data
+            - mountPath: /usr/share/elasticsearch/data
+              name: elasticsearch-storage
       volumes:
         - name: elasticsearch-storage
           persistentVolumeClaim:
