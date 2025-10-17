@@ -1,3 +1,28 @@
+<<<<<<< HEAD
+from langchain_groq import ChatGroq
+from langchain_core.prompts import ChatPromptTemplate
+from src.Config.config import GROQ_API_KEY
+
+
+llm = ChatGroq(
+    groq_api_key = GROQ_API_KEY,
+    model_name = "llama-3.3-70b-versatile",
+    temperature=0.3
+)
+
+
+itnineary_prompt = ChatPromptTemplate([
+    ("system" , "You are a helpful travel asssistant. Create a day trip itineary for {city} based on user's interest : {interests}. Provide a brief , bulleted itineary"),
+    ("human" , "Create a itineary for my day trip")
+])
+
+def generate_itineary(city:str , interests:list[str]) -> str:
+    response = llm.invoke(
+        itnineary_prompt.format_messages(city=city,interests=', '.join(interests))
+    )
+
+    return response.content
+=======
 # src/Chains/itinerary_agent.py
 from typing import List, Dict, Any
 import json
@@ -190,3 +215,4 @@ def generate_itinerary_markdown(city: str, interests: List[str], transport_mode:
     """Raccourci : renvoie directement le Markdown."""
     payload = generate_itinerary_payload(city, interests, transport_mode)
     return payload["markdown"]
+>>>>>>> bf39601136ce8923cfbc7e0af62dfcd38c3f6192
